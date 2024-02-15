@@ -12,6 +12,7 @@ def quadratic (t):
 def cosine (t):
     return math.cos(t)
 
+"""
 # step_size = 0.001
 # epoch = 100
 # t_0 = 0
@@ -63,6 +64,7 @@ def cosine (t):
 # pd.options.display.max_columns = None
 # pd.options.display.max_rows = None
 # print(df)
+"""
 
 def euler_method(t, step_size, epoch, f, initial_conditions):
     y = initial_conditions
@@ -85,9 +87,7 @@ def euler_method(t, step_size, epoch, f, initial_conditions):
         pd.options.display.max_rows = None
         return df
 
-df = euler_method(0, 0.5, 100, lambda t: np.array([sin(t), cos(t), t**2, -4*t]), np.array([2, -1, 3]))
+df = euler_method(0, 0.001, 10000, lambda t: np.array([sin(t), cos(t), t**2, -4*t]), np.array([2, -1, 3]))
 print(df)
-
-
-df = euler_method(0, 0.1, 100, lambda t: np.array([0]), np.array([1]))
-print(df)
+# df = euler_method(0, 0.001, 10000, lambda t: np.array([0]), np.array([1]))
+# print(df)
