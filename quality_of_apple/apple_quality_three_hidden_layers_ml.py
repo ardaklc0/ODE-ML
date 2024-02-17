@@ -52,11 +52,25 @@ expected_output_as_integer_train = expected_output_as_integer[:int(len(data) * 0
 expected_output_as_integer_train = expected_output_as_integer_train.to_numpy(int).reshape(1320,1)
 
 np.random.seed(5)
-hidden_neurons_layer1 = 15
-hidden_weights = np.random.uniform(size=(inputs.shape[1], hidden_neurons_layer1))
-hidden_bias =np.random.uniform(size=(1, hidden_neurons_layer1))
 
-output_weights = np.random.uniform(size=(hidden_neurons_layer1, 1))
+# Define the number of neurons in each hidden layer
+hidden_neurons_layer1 = 15 #THIS SHOULD BE 15
+hidden_neurons_layer2 = 7
+hidden_neurons_layer3 = 7
+
+# Initialize weights and biases for the first hidden layer
+hidden_weights_layer1 = np.random.uniform(size=(inputs.shape[1], hidden_neurons_layer1))
+hidden_bias_layer1 = np.random.uniform(size=(1, hidden_neurons_layer1))
+
+# Initialize weights and biases for the second hidden layer
+hidden_weights_layer2 = np.random.uniform(size=(hidden_neurons_layer1, hidden_neurons_layer2))
+hidden_bias_layer2 = np.random.uniform(size=(1, hidden_neurons_layer2))
+
+# Initialize weights and biases for the third hidden layer
+hidden_weights_layer3 = np.random.uniform(size=(hidden_neurons_layer2, hidden_neurons_layer3))
+hidden_bias_layer3 = np.random.uniform(size=(1, hidden_neurons_layer3))
+
+output_weights = np.random.uniform(size=(hidden_neurons_layer3, 1))
 output_bias = np.random.uniform(size=(1, 1))
 
 # Graph setup
@@ -68,11 +82,17 @@ output_bias = np.random.uniform(size=(1, 1))
 losses = []
 
 for epoch in range(epochs):
-    # Forward Propagation
-    hidden_layer_activation = np.dot(inputs, hidden_weights) + hidden_bias
-    hidden_layer_output = sigmoid(hidden_layer_activation)
+     # Forward Propagation
+    hidden_layer1_activation = np.dot(inputs, hidden_weights_layer1) + hidden_bias_layer1
+    hidden_layer1_output = sigmoid(hidden_layer1_activation)
 
-    output_layer_activation = np.dot(hidden_layer_output, output_weights) + output_bias
+    hidden_layer2_activation = np.dot(hidden_layer1_output, hidden_weights_layer2) + hidden_bias_layer2
+    hidden_layer2_output = sigmoid(hidden_layer2_activation)
+    
+    hidden_layer3_activation = np.dot(hidden_layer2_output, hidden_weights_layer3) + hidden_bias_layer3
+    hidden_layer3_output = sigmoid(hidden_layer3_activation)
+
+    output_layer_activation = np.dot(hidden_layer3_output, output_weights) + output_bias
     predicted_output = sigmoid(output_layer_activation)
 
     # Calculate loss
@@ -82,18 +102,37 @@ for epoch in range(epochs):
 
     # Gradient Descent
     d_predicted_output = error * sigmoid_derivative(predicted_output)
-    error_hidden_layer = d_predicted_output.dot(output_weights.T)
-    d_hidden_layer = error_hidden_layer * sigmoid_derivative(hidden_layer_output)
+
+    # Backpropagation for the third hidden layer
+    error_hidden_layer3 = d_predicted_output.dot(output_weights.T)
+    d_hidden_layer3 = error_hidden_layer3 * sigmoid_derivative(hidden_layer3_output)
+    
+    # Backpropagation for the second hidden layer
+    error_hidden_layer2 = d_hidden_layer3.dot(hidden_weights_layer3.T)
+    d_hidden_layer2 = error_hidden_layer2 * sigmoid_derivative(hidden_layer2_output)
+    
+    # Backpropagation for the first hidden layer
+    error_hidden_layer1 = d_hidden_layer2.dot(hidden_weights_layer2.T)
+    d_hidden_layer1 = error_hidden_layer1 * sigmoid_derivative(hidden_layer1_output)
 
     # Update Weights and Biases
-    output_weights = output_weights + lr * hidden_layer_output.T.dot(d_predicted_output)
+    output_weights = output_weights + lr * hidden_layer3_output.T.dot(d_predicted_output)
     output_bias = output_bias + lr * np.sum(d_predicted_output)
-    hidden_weights = hidden_weights + lr * inputs.T.dot(d_hidden_layer)
-    hidden_bias = hidden_bias + lr * np.sum(d_hidden_layer)
+    
+    hidden_weights_layer3 = hidden_weights_layer3 + lr * hidden_layer2_output.T.dot(d_hidden_layer3)
+    hidden_bias_layer3 = hidden_bias_layer3 + lr * np.sum(d_hidden_layer3)
+    
+    hidden_weights_layer2 = hidden_weights_layer2 + lr * hidden_layer1_output.T.dot(d_hidden_layer2)
+    hidden_bias_layer2 = hidden_bias_layer2 + lr * np.sum(d_hidden_layer2)
+    
+    hidden_weights_layer1 = hidden_weights_layer1 + lr * inputs.T.dot(d_hidden_layer1)
+    hidden_bias_layer1 = hidden_bias_layer1 + lr * np.sum(d_hidden_layer1)
 
     if epoch % (epochs // 10) == 0:
         progress = epoch / epochs * 100
         print(f"Training Progress: [{int(progress)}%] {'>' * int(progress / 10)}{'.' * (10 - int(progress / 10))}", end='\r')
+
+
 
 # Plot the loss function
 # lt.plot(range(epochs), losses)
