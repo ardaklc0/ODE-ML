@@ -33,8 +33,9 @@ ax.set_title('Loss Function over Epochs')
 
 losses = []
 
-prediction_text = ax.text(0.95, 0.95, '', transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', color='red', fontsize=8)
-expected_text = ax.text(0.95, 0.9, '', transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', color='blue', fontsize=8)
+input_text = ax.text(0.2, 0.95, '', transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', color='black', fontsize=8)
+prediction_text = ax.text(0.6, 0.95, '', transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', color='red', fontsize=8)
+expected_text = ax.text(0.9, 0.95, '', transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', color='blue', fontsize=8)
 
 for epoch in range(epochs):
     # Forward Propagation
@@ -62,15 +63,22 @@ for epoch in range(epochs):
 
     # Update the plot
     # ax.plot(range(epoch + 1), losses, color='blue')
-    # prediction_text.set_text(f'Prediction: {predicted_output.flatten()}')
-    # expected_text.set_text(f'Expected: {expected_output.flatten()}')
+    # input_text.set_text(f'Inputs: {inputs}')
+    # prediction_text.set_text(f'Prediction: {predicted_output}')
+    # expected_text.set_text(f'Expected: {expected_output}')
     # fig.canvas.draw()
     # fig.canvas.flush_events()
+    
+    # Progress Bar
+    progress_percentage = (epoch + 1) / epochs * 100
+    progress_bar = "[" + "=" * int(progress_percentage // 5) + ">" + " " * (20 - int(progress_percentage // 5)) + "]"
+    print(f"\rEpoch {epoch + 1}/{epochs} {progress_bar} {progress_percentage:.2f}%", end="")
 
 # Turn off interactive mode at the end
 # plt.ioff()
-prediction_text.set_text(f'Prediction: {predicted_output.flatten()}')
-expected_text.set_text(f'Expected: {expected_output.flatten()}')
+input_text.set_text(f'Inputs: {inputs}')
+prediction_text.set_text(f'Prediction: {predicted_output}')
+expected_text.set_text(f'Expected: {expected_output}')
 plt.plot(range(epochs), losses)
 plt.show()
 
