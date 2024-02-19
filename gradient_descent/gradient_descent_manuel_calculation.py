@@ -78,20 +78,40 @@ y = 4 + 3 * X + np.random.randn(100,1) # y = 8 + 24x + noise to make it more rea
 # plt.xlabel('X')
 # plt.show()
 
-lr = 0.01
-n_iter = 1000
+learning_rate = 0.001
+iterations = 10000
 
 # We initiate the wanted theta values with random values to fit theta value
 theta = np.random.randn(2,1)
-print(theta)
+print("Theta: ", end='\n')
+print(theta, end='\n')
 
 X_b = np.c_[np.ones((len(X),1)),X]
-theta,cost_history,theta_history = gradient_descent(X_b, y, theta,lr,n_iter)
-print(X_b)
+print("X_b: ", end='\n')
+print(X_b, end='\n')
+print("------------------------------------------\n")
+# theta,cost_history,theta_history = gradient_descent(X_b, y, theta,lr,n_iter)
 
+m = len(y) # no of samples
+cost_history = np.zeros(iterations) # np.zeros creates an array of zeros with the given shape
+theta_history = np.zeros((iterations,2)) # np.zeros creates an array of zeros with the given shape
+for i in range(iterations):
+    prediction = np.dot(X_b, theta)
+    error = prediction - y
+    theta = theta - (1/m) * learning_rate * (X_b.T.dot((error)))
+    theta_history[i,:] = theta.T
+    cost_history[i] = (1/2*m) * np.sum(np.square(prediction-y))
+
+
+print("Cost History: ", end='\n')
+print(cost_history, end='\n')
+print("Theta History: ", end='\n')
+print(theta_history, end='\n')
+print("------------------------------------------\n")
 print('Theta0:          {:0.3f},\nTheta1:          {:0.3f}'.format(theta[0][0],theta[1][0]))
 print('Final cost/MSE:  {:0.3f}'.format(cost_history[-1]))
 
+# Graph setup
 # fig = plt.figure(figsize=(10,8),dpi=100)
 # fig.subplots_adjust(hspace=0.4, wspace=0.4)
 # it_lr =[(2000,0.001),(500,0.01),(200,0.05),(100,0.1)]

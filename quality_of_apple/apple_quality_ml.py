@@ -59,12 +59,6 @@ hidden_bias =np.random.uniform(size=(1, hidden_neurons_layer1))
 output_weights = np.random.uniform(size=(hidden_neurons_layer1, 1))
 output_bias = np.random.uniform(size=(1, 1))
 
-# Graph setup
-# fig, ax = plt.subplots()
-# ax.set_xlabel('Epochs')
-# ax.set_ylabel('Loss')
-# ax.set_title('Loss Function over Epochs')
-
 losses = []
 
 for epoch in range(epochs):
@@ -84,7 +78,7 @@ for epoch in range(epochs):
     d_predicted_output = error * sigmoid_derivative(predicted_output)
     error_hidden_layer = d_predicted_output.dot(output_weights.T)
     d_hidden_layer = error_hidden_layer * sigmoid_derivative(hidden_layer_output)
-
+    
     # Update Weights and Biases
     output_weights = output_weights + lr * hidden_layer_output.T.dot(d_predicted_output)
     output_bias = output_bias + lr * np.sum(d_predicted_output)
@@ -96,8 +90,14 @@ for epoch in range(epochs):
         print(f"Training Progress: [{int(progress)}%] {'>' * int(progress / 10)}{'.' * (10 - int(progress / 10))}", end='\r')
 
 # Plot the loss function
-# lt.plot(range(epochs), losses)
-# plt.show()
+fig, ax = plt.subplots()
+ax.set_xlabel('Epochs')
+ax.set_ylabel('Loss')
+ax.set_title('Loss Function over Epochs')
+input_text = ax.text(0.95, 0.95, f"Loss after {epochs} epochs : {losses[-1]}", transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', color='black', fontsize=8)
+plt.plot(range(epochs), losses)
+plt.show()
+
 
 # Prediction
 print("\nOutput from neural network after 10,000 epochs: ", end='\n')
