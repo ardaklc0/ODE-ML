@@ -1,12 +1,16 @@
-1  - ) Euler / Runge Kutta method and its connection with ML
-2  - ) Activation functions / Forward propagation
-3  - ) Loss functions 
-4  - ) Backpropagation functions / Gradient Descent
-5  - ) Weight update and some illustrations
-6  - ) Hidden Layer and its effect
+1  - ) Euler / Runge Kutta method and its connection with ML.(1-4)
+1.1- ) Understanding ML.(5)
+2  - ) Activation functions / Forward propagation.(7)
+3  - ) Loss functions.(8-9)
+4  - ) Backpropagation / Gradient Descent. (gradient_descent.py) (10)
+5  - ) Weight update and some illustrations. (5)
+6  - ) Hidden Layer and its effect. (speak)
 7  - ) Some topics that we should give attention such as: number of
 neurons, number of hidden layers and number of epochs. Saturation
-level should be considered.
-8  - ) XOR Gate Prediction
-9  - ) Apple Quality Prediction
-10 - ) How ML work when it comes to solving differential equations
+level should be considered. (speak)
+8  - ) XOR Gate Prediction. (12) (xor_gate.py)
+9  - ) Apple Quality Prediction. (quality_of_apple folder)
+10 - ) How ML work when it comes to solving differential equations. (regression and random input initially connection between Euler method)
+
+Further analysis:
+1  - ) DOPRI5, Adams, Cash-Karp ve Fehlberg should be investigated.
