@@ -1,44 +1,38 @@
 import tensorflow as tf
 import numpy as np
-import matplotlib.pyplot as plt
 
-inputs = np.array([
-    [0, 0],
-    [0, 1],
-    [1, 0],
-    [1, 1]
-], dtype=np.float32)
+# Examples
+x = np.array([[0, 0],
+              [0, 1],
+              [1, 0],
+              [1, 1]], dtype=np.float32)
 
-expected_outputs = np.array([
-    [0],
-    [1],
-    [1],
-    [0]
-], dtype=np.float32)
+# Labels
+y = np.array([[0],
+              [1],
+              [1],
+              [0]], dtype=np.float32)
 
 
+# Define the model
 model = tf.keras.models.Sequential()
 model.add(tf.keras.Input(shape=(2,)))
-model.add(tf.keras.layers.Dense(2, activation=tf.keras.activations.sigmoid))
+model.add(tf.keras.layers.Dense(2, activation=tf.keras.activations.relu))  # Use ReLU activation
 model.add(tf.keras.layers.Dense(1, activation=tf.keras.activations.sigmoid))
 
 
-model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.1),  # Try this with SGD and see the difference!
-              loss=tf.keras.losses.MeanSquaredError(),
-              metrics=['accuracy', 'mse', 'binary_accuracy'])
+# Compile the model
+model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.1),
+              loss=tf.keras.losses.BinaryCrossentropy(),
+              metrics=['accuracy'])
+
+
 model.summary()
 
 
-history = model.fit(inputs, expected_outputs, batch_size=1, epochs=500)
+history = model.fit(x, y, batch_size=1, epochs=500)
 
 
-predictions = model.predict_on_batch(inputs)
-print(predictions)
-
-plt.plot(history.history['loss'])
-plt.title('Model Loss')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
-plt.show()
-
-
+predictions = model.predict_on_batch(x)
+with open('my_output.txt', 'w', encoding='utf-8') as f:
+    f.write(predictions)  # Replace with how you're saving the output
