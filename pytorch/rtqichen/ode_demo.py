@@ -18,12 +18,10 @@ parser.add_argument('--viz', action='store_true')
 parser.add_argument('--gpu', type=int, default=0)
 parser.add_argument('--adjoint', action='store_true')
 args = parser.parse_args()
-
 if args.adjoint:
     from torchdiffeq import odeint_adjoint as odeint
 else:
     from torchdiffeq import odeint
-
 device = torch.device('cuda:' + str(args.gpu) if torch.cuda.is_available() else 'cpu')
 
 true_y0 = torch.tensor([[2., 0.]]).to(device)
@@ -64,7 +62,6 @@ if args.viz:
 
 
 def visualize(true_y, pred_y, odefunc, itr):
-
     if args.viz:
         ax_traj.cla()
         ax_traj.set_title('Trajectories')
